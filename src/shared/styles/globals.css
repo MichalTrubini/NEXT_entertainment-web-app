@@ -11,6 +11,7 @@ body {
   font-family: 'Outfit', sans-serif;
   font-size: 62.5%;
   scroll-behavior: smooth;
+  background-color: var(--black);
 }
 
 a {
