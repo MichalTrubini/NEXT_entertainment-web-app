@@ -37,7 +37,7 @@ const Header = () => {
           </li>
         </Link>
       </ul>
-      <div className={styles.image}>
+      <div className={styles.avatar}>
         <Image src={userIcon} alt="user" />
       </div>
     </header>

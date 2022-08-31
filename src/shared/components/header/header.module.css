@@ -13,7 +13,7 @@
     gap: 2.4rem;
 }
 
-.image {
+.avatar {
     width: 24px;
     height: 24px;
 }
@@ -25,4 +25,42 @@
 
 .logo {
     width: 25px;
+}
+
+@media screen and (min-width:768px) {
+    .header {
+        width: calc(100% - 4.9rem);
+        padding: 2.4rem 2.4rem 2.2rem;
+    }
+
+    .logo, .listItem {
+        width: auto;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+    }
+}
+
+@media screen and (min-width:1440px) {
+    .header {
+        width: auto;
+        height: 96rem;
+        padding: 3.5rem 3.2rem;
+        position: relative;
+        flex-direction: column;
+    }
+
+    .list {
+        flex-direction: column;
+        position: absolute;
+        top: 136px;
+        gap: 4rem;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+    }
 }

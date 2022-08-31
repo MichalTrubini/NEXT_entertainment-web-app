@@ -28,3 +28,19 @@ li {
   padding: 0;
   margin: 0;
 }
+
+@media screen and (min-width: 768px) {
+  body {
+    padding: 2.3rem 2.4rem 5.6rem 2.5rem;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  body {
+    padding: 3.2rem 3.2rem 5.2rem;
+  }
+
+  .page {
+    display: flex;
+  }
+}
