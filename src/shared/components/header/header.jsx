@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <Image src={logo} alt="Entertainment app" />
+        <Link href="/"><a><Image src={logo} alt="Entertainment app" /></a></Link>
       </div>
       <ul className={styles.list}>
         <Link href="/">
@@ -21,17 +21,17 @@ const Header = () => {
             <Image src={homeIcon} alt="home" />
           </li>
         </Link>
-        <Link href="/">
+        <Link href="/movies">
           <li className={styles.listItem}>
             <Image src={moviesIcon} alt="home" />
           </li>
         </Link>
-        <Link href="/">
+        <Link href="/tv-series">
           <li className={styles.listItem}>
             <Image src={TVseriesIcon} alt="home" />
           </li>
         </Link>
-        <Link href="/">
+        <Link href="/bookmarked">
           <li className={styles.listItem}>
             <Image src={bookmarkIcon} alt="home" />
           </li>

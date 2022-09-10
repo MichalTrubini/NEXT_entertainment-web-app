@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/index.jsx", "pages/_app.jsx", "pages/_document.jsx", "pages/api/handler.js", "src/modules/recommendationModule.jsx", "src/shared/components/videoItem.jsx", "src/shared/components/header/header.jsx", "src/shared/layout/layout.jsx"],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,23 @@
+.input {
+    width: 100%;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.5);
+    padding-left: 4rem;
+    position: relative;
+}
+
+.form {
+    margin-bottom: 2.6rem;
+    position: relative;
+}
+
+.imageContainer {
+    position: absolute;
+    top: -4px;
+    width: 24px;
+    height: 24px;
+}

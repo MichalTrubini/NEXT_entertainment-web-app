@@ -1,10 +1,6 @@
 import Header from "../components/header/header";
 
-interface LayoutProps {
-    children?: React.ReactNode;
-  }
-
-const Layout:React.FC<LayoutProps> = (props) => {
+const Layout = (props) => {
     return (
         <div className="page">
         <Header />
