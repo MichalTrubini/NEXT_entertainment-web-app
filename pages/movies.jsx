@@ -90,7 +90,7 @@ export async function getStaticProps() {
   const collection = db.collection("media");
 
   const documents = await collection
-    .find({ category: { $eq: "Movie" } })
+    .find({ "category": { $eq: "Movie" } })
     .toArray();
 
   client.close();

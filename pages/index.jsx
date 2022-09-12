@@ -33,7 +33,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataTrending.map((item) => (
               <VideoItem
                 key={item.id}
-                src={item.imageSmall}
+                src={item.imageLarge}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -53,7 +53,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataRecommended.map((item) => (
               <VideoItem
                 key={item.id}
-                src={item.imageSmall}
+                src={item.imageLarge}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -77,7 +77,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataSearched.map((item) => (
               <VideoItem
                 key={item.id}
-                src={item.imageSmall}
+                src={item.imageLarge}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -152,5 +152,4 @@ export async function getStaticProps({ userInput }) {
     revalidate: 1,
   };
 }
-
 export default Home;

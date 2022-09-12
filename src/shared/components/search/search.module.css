@@ -25,3 +25,20 @@
 .input::placeholder {
     color: rgba(255, 255, 255, 0.5);
 }
+
+@media screen and (min-width: 768px) {
+    .form {
+        margin-bottom: 3.2rem;
+    }
+
+    .input {
+        font-size: 2.4rem;
+        padding-left: 5.6rem;
+    }
+
+    .imageContainer {
+        top: -2px;
+        width: 32px;
+        height: 32px;
+    }
+  }
