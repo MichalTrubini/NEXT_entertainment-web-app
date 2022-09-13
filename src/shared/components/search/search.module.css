@@ -8,6 +8,7 @@
     color: rgba(255, 255, 255, 1);
     padding-left: 4rem;
     position: relative;
+    caret-color: #FC4747;
 }
 
 .form {

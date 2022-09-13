@@ -64,4 +64,9 @@
         width: 40px;
         height: 40px;
     }
+
+    .listItem:hover {
+        cursor: pointer;
+        filter: brightness(0) saturate(100%) invert(58%) sepia(57%) saturate(6669%) hue-rotate(333deg) brightness(97%) contrast(106%);
+    }
 }
