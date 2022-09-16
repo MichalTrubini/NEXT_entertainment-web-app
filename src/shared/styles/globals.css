@@ -1,14 +1,14 @@
 :root {
-  --black: #10141E;
+  --black: #10141e;
   --white: #ffffff;
-  --grey: #5A698F;
-  --darkBlue: #161D2F;
-  --red: #FC4747;
+  --grey: #5a698f;
+  --darkBlue: #161d2f;
+  --red: #fc4747;
 }
 
 html,
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   font-size: 62.5%;
   scroll-behavior: smooth;
   background-color: var(--black);
@@ -31,7 +31,6 @@ li {
 
 main {
   padding: 8rem 1.6rem 6rem;
-  overflow-x: hidden;
   width: 100%;
 }
 
@@ -61,6 +60,7 @@ main {
   display: flex;
   gap: 1.6rem;
   margin-bottom: 2.4rem;
+  overflow-x: scroll;
 }
 
 .media-container {
@@ -70,8 +70,10 @@ main {
 }
 
 .media-container-trending {
-  width: 240px;
-  height: 140px;
+  width: 64vw;
+  height: 37.5vw;
+  max-width: 94rem;
+  max-height: 46rem;
 }
 
 .toprow {
@@ -91,17 +93,15 @@ main {
 }
 
 @media screen and (min-width: 768px) {
-  .page {
-    padding: 2.3rem 2.4rem 5.6rem 2.5rem;
-  }
 
   main {
-    padding: 12.8rem 0 0;
+    padding: 12.8rem 0 5.6rem 2.4rem;
   }
 
   .videos {
     grid-template-columns: repeat(3, 1fr);
     gap: 2.4rem 2.9rem;
+    padding-right: 2.4rem;
   }
 
   .media-container {
@@ -121,22 +121,46 @@ main {
   .toprow {
     font-size: 1.3rem;
   }
+
+  .media-container-trending {
+    width: 61.2vw;
+    height: 30vw;
+  }
+
+  .videos-trending::-webkit-scrollbar {
+    width: 12px;               /* width of the entire scrollbar */
+  }
+
+  .videos-trending::-webkit-scrollbar-track {
+    background: inherit;        /* color of the tracking area */
+  }
+  
+  .videos-trending::-webkit-scrollbar-thumb {
+    background-color: var(--grey);    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 5px solid var(--black);  /* creates padding around scroll thumb */
+  }
+
 }
 
 @media screen and (min-width: 1440px) {
   .page {
-    padding: 3.2rem 3.2rem 5.2rem;
+    padding: 3.2rem 0 5.2rem 3.2rem;
     display: flex;
     gap: 3.6rem;
+    max-width: 198rem;
+    margin: auto;
   }
 
   main {
     padding: 3.2rem 0 0;
+
   }
 
   .videos {
     grid-template-columns: repeat(4, 1fr);
     gap: 3.2rem 4rem;
+    padding-right: 3.6rem;
   }
 
   .media-container {
@@ -145,6 +169,10 @@ main {
 
   .header {
     margin-bottom: 3.2rem;
+  }
 
+  .media-container-trending {
+    width: 32.6vw;
+    height: 16vw;
   }
 }

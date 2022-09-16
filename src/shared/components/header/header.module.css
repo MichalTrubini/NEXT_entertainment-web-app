@@ -4,6 +4,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.headerWrapper {
     position: fixed;
     z-index: 99;
     width: 100%;
@@ -29,8 +32,13 @@
 }
 
 @media screen and (min-width:768px) {
+
+    .headerWrapper {
+        padding: 2.4rem 2.4rem 0;
+        background-color: var(--black);
+    }
+
     .header {
-        width: calc(100% - 4.9rem);
         padding: 2.4rem 2.4rem 2.2rem;
     }
 
@@ -45,11 +53,16 @@
 }
 
 @media screen and (min-width:1440px) {
-    .header {
+
+    .headerWrapper {
+        position: relative;
         width: auto;
+        padding: 0;
+    }
+
+    .header {
         height: 96rem;
         padding: 3.5rem 3.2rem;
-        position: relative;
         flex-direction: column;
     }
 
