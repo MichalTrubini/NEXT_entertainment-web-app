@@ -5,6 +5,7 @@ import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 import Search from "../src/shared/components/search/search";
 import { useState } from "react";
+import Layout from '../src/shared/layout/layout'
 
 const Home = ({ dataRecommended, dataTrending, dataAll }) => {
   const [userInput, setUserInput] = useState('');
@@ -18,7 +19,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
   const dataSearched = dataAll.filter((item) => item.title.toLowerCase().includes(userInput));
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Entertainment app</title>
         <meta name="description" content="Entertainment app" />
@@ -93,7 +94,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
           </div>
         </>
       }
-    </>
+    </Layout>
   );
 };
 

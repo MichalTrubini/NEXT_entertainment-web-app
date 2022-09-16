@@ -5,6 +5,7 @@ import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 import Search from "../src/shared/components/search/search";
 import { useState } from "react";
+import Layout from '../src/shared/layout/layout'
 
 const Home = ({ dataTV }) => {
   const [userInput, setUserInput] = useState("");
@@ -18,7 +19,7 @@ const Home = ({ dataTV }) => {
   const dataSearched = dataTV.filter((item) => item.title.toLowerCase().includes(userInput));
 
   return (
-    <>
+    <Layout>
       <Head>
         <title>Entertainment - TV Series</title>
         <meta name="description" content="Entertainment - TV series" />
@@ -78,7 +79,7 @@ const Home = ({ dataTV }) => {
           </div>
         </>
       )}
-    </>
+    </Layout>
   );
 };
 
