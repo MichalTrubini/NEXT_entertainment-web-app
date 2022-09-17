@@ -32,12 +32,15 @@ const LoginTemplate = (props) => {
           ref={props.refPassword}
           required
         />
-        <input
-          className={router.asPath === "/login" ? styles.none : styles.input}
-          type="password"
-          placeholder="Repeat password"
-          required
-        />
+        {router.asPath === "/signup" && (
+          <input
+            className={styles.input}
+            type="password"
+            placeholder="Repeat password"
+            required
+          />
+        )}
+
         <button type="submit" className={styles.button}>
           {props.buttonText}
         </button>

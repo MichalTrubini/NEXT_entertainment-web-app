@@ -24,6 +24,7 @@
 
 .avatar {
     text-align: center;
+    position: relative;
 }
 
 .listItem {
@@ -37,7 +38,19 @@
 
 .login {
     color: var(--white);
-    font-size: 1.5rem;
+    font-size: 1rem;
+    position: absolute;
+    left: -4px;
+}
+
+.userLogout {
+    color: var(--grey);
+    width: 24px;
+    font-size: 1.6rem;
+    border: 2px solid var(--grey);
+    border-radius: 100%;
+    position: relative;
+    left: -2px;
 }
 
 @media screen and (min-width:768px) {
@@ -60,8 +73,20 @@
         height: 32px;
     }
 
+    .login {
+        top: 5px;
+        left: -60px;
+        font-size: 1.5rem;
+    }
+
     .login:hover {
         cursor: pointer;
+    }
+
+    .userLogout {
+        width: 32px;
+        font-size: 2.1rem;
+        left: 0;
     }
 }
 
@@ -94,5 +119,10 @@
     .listItem:hover {
         cursor: pointer;
         filter: brightness(0) saturate(100%) invert(58%) sepia(57%) saturate(6669%) hue-rotate(333deg) brightness(97%) contrast(106%);
+    }
+
+    .login {
+        top: 45px;
+        left: -5px;
     }
 }

@@ -3,14 +3,21 @@ import styles from "./videoItem.module.css";
 import bookmark from "../../../public/assets/icon-bookmark-empty.svg";
 import playIcon from "../../../public/assets/icon-play.svg";
 import { useState } from "react";
+import { useSession } from 'next-auth/client';
 
 const VideoItem = (props) => {
   const [isShown, setIsShown] = useState(false);
 
+  const [session, loading] = useSession();
+
+  function bookmarkHandler() {
+    if (!session) {console.log('problem')}
+  }
+
   return (
     <div className={styles.video}>
       <div className={styles.bookmarkContainer}>
-        <Image src={bookmark} className={styles.bookmarkHover}/>
+        <Image src={bookmark} className={styles.bookmarkHover} onClick={bookmarkHandler}/>
       </div>
       <div
         className={`${styles.imageContainer} ${props.classNameImage}`}

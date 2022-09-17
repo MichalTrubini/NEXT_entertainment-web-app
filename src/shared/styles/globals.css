@@ -92,6 +92,16 @@ main {
   font-size: 1.5rem;
 }
 
+.bookmarkWarning {
+  color: var(--white);
+  text-align: center;
+  font-size: 1.8rem;
+  width: 80%;
+  margin: auto;
+  padding-top: 2rem;
+  font-weight: 300;
+}
+
 @media screen and (min-width: 768px) {
 
   main {
