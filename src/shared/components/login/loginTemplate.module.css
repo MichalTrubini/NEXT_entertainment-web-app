@@ -33,7 +33,7 @@
   font-size: 1.5rem;
   color: var(--white);
   outline: none;
-  caret-color: #FC4747;
+  caret-color: #fc4747;
 }
 
 .input::placeholder {
@@ -41,7 +41,7 @@
 }
 
 .input:focus {
-    border-bottom: 1px solid var(--white);
+  border-bottom: 1px solid var(--white);
 }
 
 .button {
@@ -89,26 +89,24 @@
   .form {
     padding: 3.2rem;
   }
+  .action:hover {
+    cursor: pointer;
+  }
+  .logoContainer:hover {
+    cursor: pointer;
+  }
+  .button:hover {
+    color: var(--black);
+    background-color: var(--white);
+    cursor: pointer;
+  }
 }
 
 @media screen and (min-width: 1440px) {
-    .container {
-      padding: 7.8rem 0rem;
-    }
-    .logoContainer {
-      margin-bottom: 8.2rem;
-    }
-
-    .logoContainer:hover {
-        cursor: pointer;
-      }
-    .button:hover {
-        color: var(--black);
-        background-color: var(--white);
-        cursor: pointer;
-    }
-    .action:hover{
-        cursor: pointer;
-    }
+  .container {
+    padding: 7.8rem 0rem;
   }
-  
+  .logoContainer {
+    margin-bottom: 8.2rem;
+  }
+}

@@ -10,6 +10,8 @@ import bookmarkIcon from "../../../../public/assets/icon-nav-bookmark.svg";
 import userIcon from "../../../../public/assets/image-avatar.png";
 
 const Header = () => {
+  const login = false;
+
   return (
     <div className={styles.headerWrapper}>
       <header className={styles.header}>
@@ -43,7 +45,12 @@ const Header = () => {
           </Link>
         </ul>
         <div className={styles.avatar}>
-          <Image src={userIcon} alt="user" />
+          {login && (
+            <div className={styles.avatarContainer}>
+              <Image src={userIcon} alt="user" />
+            </div>
+          )}
+          <Link href='login'><p className={styles.login}>Log in</p></Link>
         </div>
       </header>
     </div>
