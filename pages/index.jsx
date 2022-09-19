@@ -34,6 +34,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataTrending.map((item) => (
               <VideoItem
                 key={item.id}
+                dataid={item.id}
                 src={item.imageLarge}
                 year={item.year}
                 rating={item.rating}
@@ -54,6 +55,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataRecommended.map((item) => (
               <VideoItem
                 key={item.id}
+                dataid={item.id}
                 src={item.imageLarge}
                 year={item.year}
                 rating={item.rating}
@@ -78,6 +80,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataSearched.map((item) => (
               <VideoItem
                 key={item.id}
+                dataid={item.id}
                 src={item.imageLarge}
                 year={item.year}
                 rating={item.rating}

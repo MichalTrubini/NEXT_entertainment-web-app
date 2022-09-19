@@ -17,8 +17,6 @@ const Header = () => {
     signOut();
   }
 
-  console.log(session)
-
   return (
     <div className={styles.headerWrapper}>
       <header className={styles.header}>

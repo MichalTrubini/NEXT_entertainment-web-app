@@ -37,6 +37,7 @@ const Home = ({ dataTV }) => {
             {dataTV.map((item) => (
               <VideoItem
                 key={item.id}
+                dataid={item.id}
                 src={item.imageSmall}
                 year={item.year}
                 rating={item.rating}

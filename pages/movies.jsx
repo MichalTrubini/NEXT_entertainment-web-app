@@ -35,6 +35,7 @@ const Home = ({ dataMovies }) => {
             {dataMovies.map((item) => (
               <VideoItem
                 key={item.id}
+                dataid={item.id}
                 src={item.imageSmall}
                 year={item.year}
                 rating={item.rating}
