@@ -157,62 +157,70 @@ const Bookmarked = ({ TVShows, Movies }) => {
 
 export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req });
-  const emailLoggedUser = session.user.email;
 
-  const client = await MongoClient.connect(
-    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-  );
+  if (session) {
+    const emailLoggedUser = session.user.email;
 
-  const db = client.db();
+    const client = await MongoClient.connect(
+      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+    );
 
-  const media = db.collection("media");
-  const users = db.collection("users");
+    const db = client.db();
 
-  const documentsBookmarks = await users
-    .find({ email: emailLoggedUser }, { bookmarks: 1, _id: 0 })
-    .toArray();
+    const media = db.collection("media");
+    const users = db.collection("users");
 
-  const bookmarksRaw = documentsBookmarks.map((document) => [
-    document.bookmarks,
-  ]);
-  const bookmarksClean = bookmarksRaw[0][0].map((str) => {
-    return Number(str);
-  });
+    const documentsBookmarks = await users
+      .find({ email: emailLoggedUser }, { bookmarks: 1, _id: 0 })
+      .toArray();
 
-  const documentsShows = await media
-    .find({ category: { $eq: "TV Series" }, _id: { $in: bookmarksClean } })
-    .toArray();
+    const bookmarksRaw = documentsBookmarks.map((document) => [
+      document.bookmarks,
+    ]);
+    const bookmarksClean = bookmarksRaw[0][0].map((str) => {
+      return Number(str);
+    });
 
-  const documentsMovies = await media
-    .find({ category: { $eq: "Movie" }, _id: { $in: bookmarksClean } })
-    .toArray();
+    const documentsShows = await media
+      .find({ category: { $eq: "TV Series" }, _id: { $in: bookmarksClean } })
+      .toArray();
 
-  client.close();
+    const documentsMovies = await media
+      .find({ category: { $eq: "Movie" }, _id: { $in: bookmarksClean } })
+      .toArray();
 
-  return {
-    props: {
-      TVShows: documentsShows.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.regular.small,
-        imageMedium: document.thumbnail.regular.medium,
-        imageLarge: document.thumbnail.regular.large,
-      })),
-      Movies: documentsMovies.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.regular.small,
-        imageMedium: document.thumbnail.regular.medium,
-        imageLarge: document.thumbnail.regular.large,
-      })),
-    },
-  };
+    client.close();
+
+    return {
+      props: {
+        TVShows: documentsShows.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        })),
+        Movies: documentsMovies.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        })),
+      },
+    };
+  } else return {
+        redirect: {
+            destination: '/no-bookmarks',
+            statusCode: 307
+        }
+  }
 }
 
 export default Bookmarked;
