@@ -8,7 +8,7 @@ import VideoItem from "../src/shared/components/videoItem";
 import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 
-const Bookmarked = ({ TVShows, Movies }) => {
+const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
   const [session, loading] = useSession();
 
@@ -50,6 +50,7 @@ const Bookmarked = ({ TVShows, Movies }) => {
           <div className="videos">
             {Movies.map((item) => (
               <VideoItem
+                bookmarks={bookmarks}
                 key={item.id}
                 dataid={item.id}
                 src={item.imageSmall}
@@ -76,6 +77,7 @@ const Bookmarked = ({ TVShows, Movies }) => {
             {MoviesSearched.map((item) => (
               <VideoItem
                 key={item.id}
+                bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
                 year={item.year}
@@ -101,6 +103,7 @@ const Bookmarked = ({ TVShows, Movies }) => {
             {TVShows.map((item) => (
               <VideoItem
                 key={item.id}
+                bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
                 year={item.year}
@@ -126,6 +129,7 @@ const Bookmarked = ({ TVShows, Movies }) => {
             {TVShowsSearched.map((item) => (
               <VideoItem
                 key={item.id}
+                bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
                 year={item.year}
@@ -177,16 +181,16 @@ export async function getServerSideProps(context) {
     const bookmarksRaw = documentsBookmarks.map((document) => [
       document.bookmarks,
     ]);
-    const bookmarksClean = bookmarksRaw[0][0].map((str) => {
+    const bookmarks = bookmarksRaw[0][0].map((str) => {
       return Number(str);
     });
 
     const documentsShows = await media
-      .find({ category: { $eq: "TV Series" }, _id: { $in: bookmarksClean } })
+      .find({ category: { $eq: "TV Series" }, _id: { $in: bookmarks } })
       .toArray();
 
     const documentsMovies = await media
-      .find({ category: { $eq: "Movie" }, _id: { $in: bookmarksClean } })
+      .find({ category: { $eq: "Movie" }, _id: { $in: bookmarks } })
       .toArray();
 
     client.close();
@@ -213,6 +217,7 @@ export async function getServerSideProps(context) {
           imageMedium: document.thumbnail.regular.medium,
           imageLarge: document.thumbnail.regular.large,
         })),
+        bookmarks: bookmarks
       },
     };
   } else return {

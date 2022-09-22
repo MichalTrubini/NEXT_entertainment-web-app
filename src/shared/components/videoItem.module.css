@@ -82,6 +82,16 @@
   .imageContainer:hover {
     cursor: pointer;
   }
+
+  .bookmarkContainer:hover {
+    cursor: pointer;
+    background-color: rgb(255, 255, 255);
+  }
+
+  .bookmarkContainer:hover .bookmarkHover {
+    filter: invert(99%) sepia(4%) saturate(716%) hue-rotate(257deg)
+      brightness(112%) contrast(100%);
+  }
 }
 
 @media screen and (min-width: 1440px) {
@@ -117,13 +127,7 @@
     padding-right: 2.4rem;
   }
 
-  .bookmarkContainer:hover {
-    cursor: pointer;
-    background-color: rgb(255, 255, 255);
-  }
 
-  .bookmarkContainer:hover .bookmarkHover {
-    filter: invert(99%) sepia(4%) saturate(716%) hue-rotate(257deg)
-      brightness(112%) contrast(100%);
-  }
+
+
 }
