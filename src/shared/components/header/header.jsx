@@ -1,7 +1,7 @@
 import styles from "./header.module.css";
 import Image from "next/image";
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/client";
+import { useSession, signOut } from "next-auth/react";
 
 import logo from "../../../../public/assets/logo.svg";
 import homeIcon from "../../../../public/assets/icon-nav-home.svg";
@@ -11,8 +11,9 @@ import bookmarkIcon from "../../../../public/assets/icon-nav-bookmark.svg";
 import userIcon from "../../../../public/assets/image-avatar.png";
 
 const Header = () => {
-  const [session, loading] = useSession();
-
+  const {data: session, status} = useSession();
+  const loading = status === "loading"
+  
   function logoutHandler() {
     signOut();
   }

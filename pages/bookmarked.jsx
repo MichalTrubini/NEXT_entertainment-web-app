@@ -2,7 +2,7 @@ import Layout from "../src/shared/layout/layout";
 import Head from "next/head";
 import Search from "../src/shared/components/search/search";
 import { useState } from "react";
-import { useSession, getSession } from "next-auth/client";
+import { useSession, getSession } from "next-auth/react";
 import { MongoClient } from "mongodb";
 import VideoItem from "../src/shared/components/videoItem";
 import movieIcon from "../public/assets/icon-category-movie.svg";

@@ -6,7 +6,7 @@ import seriesIcon from "../public/assets/icon-category-tv.svg";
 import Search from "../src/shared/components/search/search";
 import { useState } from "react";
 import Layout from '../src/shared/layout/layout'
-import { getSession } from "next-auth/client";
+import { getSession } from "next-auth/react";
 
 const Home = ({ Movies, bookmarks }) => {
   const [userInput, setUserInput] = useState("");

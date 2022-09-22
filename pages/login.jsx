@@ -1,5 +1,5 @@
 import LoginTemplate from "../src/shared/components/login/loginTemplate";
-import { signIn } from "next-auth/client";
+import { signIn } from "next-auth/react";
 import { useRef, useState } from "react";
 
 const Login = () => {

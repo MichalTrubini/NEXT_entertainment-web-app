@@ -4,7 +4,7 @@ import bookmarkOff from "../../../public/assets/icon-bookmark-empty.svg";
 import bookmarkOn from "../../../public/assets/icon-bookmark-full.svg";
 import playIcon from "../../../public/assets/icon-play.svg";
 import { useState } from "react";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import Portal from '../portal/portal';
 import BookmarkError from './bookmarkError';
 
@@ -37,7 +37,7 @@ const VideoItem = (props) => {
 
   const [isShown, setIsShown] = useState(false);
   const [bookmarked, setBookmarked] = useState(bookmarksCheck());
-  const [session, loading] = useSession();
+  const { data: session, status } = useSession()
   const [bookmarkError, setBookmarkError] = useState(false);
 
   function bookmarkHandler(event) {
