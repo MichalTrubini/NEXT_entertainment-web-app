@@ -16,34 +16,83 @@ const LoginTemplate = (props) => {
           </a>
         </Link>
       </div>
-      <form className={styles.form} onSubmit={props.onSubmit}>
+      <form className={styles.form} onSubmit={props.onSubmit} noValidate>
         <h1 className={styles.title}>{props.title}</h1>
-        <input
-          className={styles.input}
-          type="email"
-          placeholder="Email address"
-          ref={props.refEmail}
-          required
-        />
-        <input
-          className={styles.input}
-          type="password"
-          placeholder="Password"
-          ref={props.refPassword}
-          required
-        />
-        {router.asPath === "/signup" && (
+        <div className={styles.inputContainer}>
           <input
-            className={styles.input}
-            type="password"
-            placeholder="Repeat password"
+            className={
+              props.emptyEmail
+                ? `${styles.input} ${styles.inputErrorClassname}`
+                : styles.input
+            }
+            type="email"
+            placeholder="Email address"
+            ref={props.refEmail}
+            onClick={props.onClick}
             required
           />
+          {props.wrongFormatEmail && (
+            <p className={styles.warning}>Incorrect email format</p>
+          )}
+          {props.emptyEmail && <p className={styles.warning}>Can't be empty</p>}
+        </div>
+        <div className={styles.inputContainer}>
+          <input
+            className={
+              props.emptyPassword
+                ? `${styles.input} ${styles.inputErrorClassname}`
+                : styles.input
+            }
+            type="password"
+            placeholder="Password"
+            ref={props.refPassword}
+            onClick={props.onClick}
+            required
+          />
+          {props.emptyPassword && (
+            <p className={styles.warning}>Can't be empty</p>
+          )}
+        </div>
+
+        {router.asPath === "/signup" && (
+          <div className={styles.inputContainer}>
+            <input
+              className={
+                props.emptyPassword
+                  ? `${styles.input} ${styles.inputErrorClassname}`
+                  : styles.input
+              }
+              type="password"
+              placeholder="Repeat password"
+              ref={props.refPasswordRepeated}
+              onClick={props.onClick}
+              required
+            />
+            {props.emptyPasswordRepeated && (
+              <p className={styles.warning}>Can't be empty</p>
+            )}
+            {props.incorrectPassword && (
+              <p className={styles.warning}>Passwords are not equal</p>
+            )}
+          </div>
         )}
 
-        <button type="submit" className={styles.button}>
-          {props.buttonText}
-        </button>
+        <div className={styles.inputContainer}>
+          {props.wrongCredentials && (
+            <p className={styles.warningCredentials}>
+              Incorrect email or password
+            </p>
+          )}
+          {props.userExists && (
+            <p className={styles.warningCredentials}>
+              Such an email already exists!
+            </p>
+          )}
+          <button type="submit" className={styles.button}>
+            {props.buttonText}
+          </button>
+        </div>
+
         <div className={styles.row}>
           <p className={styles.message}>{props.message}</p>
           <Link href={props.link}>

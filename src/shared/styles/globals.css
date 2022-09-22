@@ -2,7 +2,7 @@
   --black: #10141e;
   --white: #ffffff;
   --grey: #5a698f;
-  --darkBlue: #161d2f;
+  --darkBlue: rgb(22, 29, 47);
   --red: #fc4747;
 }
 
@@ -33,6 +33,11 @@ li {
 main {
   padding: 8rem 1.6rem 6rem;
   width: 100%;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
 }
 
 .videos {

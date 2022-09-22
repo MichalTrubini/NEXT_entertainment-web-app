@@ -5,18 +5,21 @@ import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 import Search from "../src/shared/components/search/search";
 import { useState } from "react";
-import Layout from '../src/shared/layout/layout'
+import Layout from "../src/shared/layout/layout";
+import { getSession } from "next-auth/client";
 
-const Home = ({ dataRecommended, dataTrending, dataAll }) => {
-  const [userInput, setUserInput] = useState('');
+const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
+  const [userInput, setUserInput] = useState("");
 
   const submitUserDataHandler = (userData) => {
-    if (userData === '') return setUserInput('');
+    if (userData === "") return setUserInput("");
 
     setUserInput(userData.toLowerCase());
   };
 
-  const dataSearched = dataAll.filter((item) => item.title.toLowerCase().includes(userInput));
+  const dataSearched = dataAll.filter((item) =>
+    item.title.toLowerCase().includes(userInput)
+  );
 
   return (
     <Layout>
@@ -25,15 +28,19 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
         <meta name="description" content="Entertainment app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Search onSubmitUserData={submitUserDataHandler} prompt="Search for movies or TV series" />
+      <Search
+        onSubmitUserData={submitUserDataHandler}
+        prompt="Search for movies or TV series"
+      />
 
-      {userInput.length === 0 && 
+      {userInput.length === 0 && (
         <>
           <h2 className="header">Trending</h2>
           <div className="videos-trending">
             {dataTrending.map((item) => (
               <VideoItem
                 key={item.id}
+                bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageLarge}
                 year={item.year}
@@ -55,6 +62,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             {dataRecommended.map((item) => (
               <VideoItem
                 key={item.id}
+                bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageLarge}
                 year={item.year}
@@ -71,15 +79,18 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             ))}
           </div>
         </>
-      }
+      )}
 
-      {userInput.length !== 0 && 
+      {userInput.length !== 0 && (
         <>
-          <h2 className="header">{`Found ${dataSearched.length} ${dataSearched.length === 1 ? 'result' : 'results'} for '${userInput}'`}</h2>
+          <h2 className="header">{`Found ${dataSearched.length} ${
+            dataSearched.length === 1 ? "result" : "results"
+          } for '${userInput}'`}</h2>
           <div className="videos">
             {dataSearched.map((item) => (
               <VideoItem
                 key={item.id}
+                bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageLarge}
                 year={item.year}
@@ -96,64 +107,137 @@ const Home = ({ dataRecommended, dataTrending, dataAll }) => {
             ))}
           </div>
         </>
-      }
+      )}
     </Layout>
   );
 };
 
-export async function getStaticProps({ userInput }) {
-  const client = await MongoClient.connect(
-    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-  );
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
 
-  const db = client.db();
+  if (session) {
+    const emailLoggedUser = session.user.email;
 
-  const collection = db.collection("media");
+    const client = await MongoClient.connect(
+      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+    );
 
-  const documentsRecommended = await collection
-    .find({ "thumbnail.trending": { $eq: null } })
-    .toArray();
-  const documentsTrending = await collection
-    .find({ "thumbnail.trending": { $ne: null } })
-    .toArray();
+    const db = client.db();
 
-  const documents = await collection.find().toArray();
+    const media = db.collection("media");
+    const users = db.collection("users");
 
-  client.close();
+    const documentsBookmarks = await users
+      .find({ email: emailLoggedUser }, { bookmarks: 1, _id: 0 })
+      .toArray();
 
-  return {
-    props: {
-      dataRecommended: documentsRecommended.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.regular.small,
-        imageMedium: document.thumbnail.regular.medium,
-        imageLarge: document.thumbnail.regular.large,
-      })),
-      dataTrending: documentsTrending.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.trending.small,
-        imageLarge: document.thumbnail.trending.large,
-      })),
-      dataAll: documents.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.regular.small,
-        imageMedium: document.thumbnail.regular.medium,
-        imageLarge: document.thumbnail.regular.large,
-      })),
-    },
-    revalidate: 1,
-  };
+    const bookmarksRaw = documentsBookmarks.map((document) => [
+      document.bookmarks,
+    ]);
+
+    const bookmarks = bookmarksRaw[0][0].map((str) => {
+      return Number(str);
+    })
+
+    const documentsRecommended = await media
+      .find({ "thumbnail.trending": { $eq: null } })
+      .toArray();
+    const documentsTrending = await media
+      .find({ "thumbnail.trending": { $ne: null } })
+      .toArray();
+
+    const documents = await media.find().toArray();
+
+    client.close();
+
+    return {
+      props: {
+        dataRecommended: documentsRecommended.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        })),
+        dataTrending: documentsTrending.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.trending.small,
+          imageLarge: document.thumbnail.trending.large,
+        })),
+        dataAll: documents.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        })),
+        bookmarks: bookmarks,
+      },
+    };
+  } else {
+    const client = await MongoClient.connect(
+      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+    );
+
+    const db = client.db();
+
+    const media = db.collection("media");
+
+    const documentsRecommended = await media
+      .find({ "thumbnail.trending": { $eq: null } })
+      .toArray();
+    const documentsTrending = await media
+      .find({ "thumbnail.trending": { $ne: null } })
+      .toArray();
+
+    const documents = await media.find().toArray();
+
+    client.close();
+
+    return {
+      props: {
+        dataRecommended: documentsRecommended.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        })),
+        dataTrending: documentsTrending.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.trending.small,
+          imageLarge: document.thumbnail.trending.large,
+        })),
+        dataAll: documents.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        }))
+      },
+    };
+  }
 }
+
 export default Home;

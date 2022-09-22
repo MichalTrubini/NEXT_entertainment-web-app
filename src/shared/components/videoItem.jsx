@@ -3,7 +3,7 @@ import styles from "./videoItem.module.css";
 import bookmarkOff from "../../../public/assets/icon-bookmark-empty.svg";
 import bookmarkOn from "../../../public/assets/icon-bookmark-full.svg";
 import playIcon from "../../../public/assets/icon-play.svg";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/client";
 import Portal from '../portal/portal';
 import BookmarkError from './bookmarkError';
@@ -39,12 +39,6 @@ const VideoItem = (props) => {
   const [bookmarked, setBookmarked] = useState(bookmarksCheck());
   const [session, loading] = useSession();
   const [bookmarkError, setBookmarkError] = useState(false);
-
-/*   useEffect(() => {
-    bookmarkError === true ? `${document.body.style.position = "fixed"} ${document.body.style.overflow = "scroll"}` : document.body.style.position = "static";
-},[bookmarkError])  */
-
-console.log(bookmarked)
 
   function bookmarkHandler(event) {
 

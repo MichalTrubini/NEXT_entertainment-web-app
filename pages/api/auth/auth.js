@@ -32,10 +32,11 @@ async function handler(req, res) {
   }
 
   const hashedPassword = await hashPassword(password);
+  const bookmarks = []
 
   const result = await db
     .collection("users")
-    .insertOne({ email: email, password: hashedPassword });
+    .insertOne({ email: email, password: hashedPassword, bookmarks: bookmarks });
 
   res.status(201).json({ message: "user created" });
   client.close();

@@ -79,6 +79,47 @@
   display: none;
 }
 
+.inputContainer {
+  position: relative;
+}
+
+.warning {
+  color: var(--red);
+  background-color: rgba(22, 27, 47, 0.9);
+  padding-left: 1rem;
+  font-size: 1.3rem;
+  font-weight: 300;
+  position: absolute;
+  right: 20px;
+  top: 25px;
+}
+
+.warningCredentials {
+  color: var(--red);
+  font-size: 1.3rem;
+  font-weight: 300;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin: auto;
+  top: 10px;
+}
+
+.successMessage {
+  color: #60ff30;
+  font-size: 1.3rem;
+  font-weight: 300;
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  margin: auto;
+  top: 10px;
+}
+
+.inputErrorClassname {
+  border-bottom: 1px solid var(--red)!important;
+}
+
 @media screen and (min-width: 768px) {
   .container {
     padding: 8.8rem 0rem;
