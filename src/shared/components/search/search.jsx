@@ -25,7 +25,7 @@ const Search = (props) => {
         onChange={inputHandler}
       />
       <div className={styles.imageContainer}>
-        <Image src={searchIcon} onClick={submitHandler}/>
+        <Image src={searchIcon} onClick={submitHandler} alt='search'/>
       </div>
     </form>
   );

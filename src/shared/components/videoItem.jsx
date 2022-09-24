@@ -37,7 +37,7 @@ const VideoItem = (props) => {
 
   const [isShown, setIsShown] = useState(false);
   const [bookmarked, setBookmarked] = useState(bookmarksCheck());
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const [bookmarkError, setBookmarkError] = useState(false);
 
   function bookmarkHandler(event) {
@@ -62,6 +62,7 @@ const VideoItem = (props) => {
             src={bookmarked ? bookmarkOn : bookmarkOff}
             className={styles.bookmarkHover}
             dataid={props.dataid}
+            alt='bookmark'
           />
         </div>
         <div

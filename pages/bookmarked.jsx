@@ -10,7 +10,7 @@ import seriesIcon from "../public/assets/icon-category-tv.svg";
 
 const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
-  const [session, loading] = useSession();
+  const {data: session} = useSession();
 
   const submitUserDataHandler = (userData) => {
     if (userData === "") return setUserInput("");

@@ -11,6 +11,7 @@ import { getSession } from "next-auth/react";
 const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
 
+
   const submitUserDataHandler = (userData) => {
     if (userData === "") return setUserInput("");
 
@@ -113,7 +114,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
 };
 
 export async function getServerSideProps(context) {
-  const session = await getSession({ req: context.req });
+  const session = await getSession(context);
 
   if (session) {
     const emailLoggedUser = session.user.email;
@@ -234,7 +235,7 @@ export async function getServerSideProps(context) {
           imageSmall: document.thumbnail.regular.small,
           imageMedium: document.thumbnail.regular.medium,
           imageLarge: document.thumbnail.regular.large,
-        }))
+        })),
       },
     };
   }
