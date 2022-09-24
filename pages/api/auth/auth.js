@@ -12,8 +12,7 @@ async function handler(req, res) {
   if (
     !email ||
     !email.includes("@") ||
-    !password ||
-    password.trim().length < 7
+    !password 
   ) {
     res.status(422).json({ message: "invalid input" });
     return;
