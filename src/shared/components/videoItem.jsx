@@ -5,8 +5,9 @@ import bookmarkOn from "../../../public/assets/icon-bookmark-full.svg";
 import playIcon from "../../../public/assets/icon-play.svg";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import Portal from '../portal/portal';
-import BookmarkError from './bookmarkError';
+import Portal from "../portal/portal";
+import BookmarkError from "./bookmarkError";
+import CSSTransition from "react-transition-group/CSSTransition";
 
 async function addBookmarkToDb(bookmarkID, userEmail) {
   const response = await fetch("/api/bookmarkHandler", {
@@ -27,21 +28,20 @@ async function addBookmarkToDb(bookmarkID, userEmail) {
 }
 
 const VideoItem = (props) => {
-
-  const bookmarks = props.bookmarks
+  const bookmarks = props.bookmarks;
 
   const bookmarksCheck = () => {
-    if (bookmarks) {return bookmarks.includes(props.dataid) ? true : false}
-    else return false
-  }
+    if (bookmarks) {
+      return bookmarks.includes(props.dataid) ? true : false;
+    } else return false;
+  };
 
   const [isShown, setIsShown] = useState(false);
   const [bookmarked, setBookmarked] = useState(bookmarksCheck());
-  const { data: session } = useSession()
+  const { data: session } = useSession();
   const [bookmarkError, setBookmarkError] = useState(false);
 
   function bookmarkHandler(event) {
-
     if (!session) {
       return setBookmarkError(true);
     } else {
@@ -49,20 +49,28 @@ const VideoItem = (props) => {
       const userEmail = session.user.email;
 
       addBookmarkToDb(bookmarkId, userEmail);
-      setBookmarked(prevValue => !prevValue);
+      setBookmarked((prevValue) => !prevValue);
     }
   }
 
   return (
     <>
-      <Portal selector={"#Portal"}>{bookmarkError && <BookmarkError closeModal = {() => {setBookmarkError(false)}}/>}</Portal>
+      <Portal selector={"#Portal"}>
+        {bookmarkError && (
+          <BookmarkError
+            closeModal={() => {
+              setBookmarkError(false);
+            }}
+          />
+        )}
+      </Portal>
       <div className={styles.video}>
         <div className={styles.bookmarkContainer} onClick={bookmarkHandler}>
           <Image
             src={bookmarked ? bookmarkOn : bookmarkOff}
             className={styles.bookmarkHover}
             dataid={props.dataid}
-            alt='bookmark'
+            alt="bookmark"
           />
         </div>
         <div
@@ -71,18 +79,22 @@ const VideoItem = (props) => {
           onMouseLeave={() => setIsShown(false)}
         >
           <Image src={props.src} alt={props.alt} layout="fill" />
-          <div
-            className={
-              isShown
-                ? `${styles.hoverOverlay} ${styles.hoverOn}`
-                : `${styles.hoverOverlay} ${styles.hoverOff}`
-            }
+          <CSSTransition
+            mountOnEnter
+            unmountOnExit
+            in={isShown}
+            timeout={300}
+            classNames="fade-slide"
           >
-            <div className={styles.hoverPlay}>
-              <Image src={playIcon} />
-              <p className={styles.play} alt='play'>Play</p>
+            <div className={styles.hoverOverlay}>
+              <div className={styles.hoverPlay}>
+                <Image src={playIcon} />
+                <p className={styles.play} alt="play">
+                  Play
+                </p>
+              </div>
             </div>
-          </div>
+          </CSSTransition>
         </div>
         <div className={props.classNameRow}>
           <div className={`${styles.list} ${props.classNameTopRow}`}>
