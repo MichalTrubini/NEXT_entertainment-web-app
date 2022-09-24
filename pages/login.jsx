@@ -1,6 +1,7 @@
 import LoginTemplate from "../src/shared/components/login/loginTemplate";
 import { signIn } from "next-auth/react";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import Router from "next/router";
 
 const Login = () => {
   const emailInputRef = useRef();
@@ -10,6 +11,19 @@ const Login = () => {
   const [emptyPasswordError, setEmptyPasswordError] = useState(false);
   const [wrongFormatEmail, setWrongFormatEmail] = useState(false);
   const [wrongCredentials, setWrongCredentials] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    Router.events.on("routeChangeStart", () => setLoading(true));
+    Router.events.on("routeChangeComplete", () => setLoading(false));
+    Router.events.on("routeChangeError", () => setLoading(false));
+    return () => {
+      Router.events.off("routeChangeStart", () => setLoading(true));
+      Router.events.off("routeChangeComplete", () => setLoading(false));
+      Router.events.off("routeChangeError", () => setLoading(false));
+    };
+  }, [Router.events]);
 
   async function submitHandler(event) {
     event.preventDefault();
@@ -53,21 +67,30 @@ const Login = () => {
   };
 
   return (
-    <LoginTemplate
-      title="Login"
-      buttonText="Login to your account"
-      message="Don't have an account?"
-      link="/signup"
-      action="Sign up"
-      refEmail={emailInputRef}
-      refPassword={emailPasswordRef}
-      onSubmit={submitHandler}
-      emptyEmail={emptyEmailError}
-      wrongFormatEmail={wrongFormatEmail}
-      emptyPassword={emptyPasswordError}
-      wrongCredentials={wrongCredentials}
-      onClick={clearInputHandler}
-    />
+    <div className={loading ? 'overlay page' : 'page'}>
+      {loading && (
+        <div className="dotWindmillContainer">
+          <div className="dotWindmill"></div>
+        </div>
+      )}
+        <LoginTemplate
+        title="Login"
+        buttonText="Login to your account"
+        message="Don't have an account?"
+        link="/signup"
+        action="Sign up"
+        refEmail={emailInputRef}
+        refPassword={emailPasswordRef}
+        onSubmit={submitHandler}
+        emptyEmail={emptyEmailError}
+        wrongFormatEmail={wrongFormatEmail}
+        emptyPassword={emptyPasswordError}
+        wrongCredentials={wrongCredentials}
+        onClick={clearInputHandler}
+      />
+
+      </div>
+
   );
 };
 

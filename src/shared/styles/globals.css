@@ -112,6 +112,72 @@ input:-webkit-autofill:focus {
   margin-top: 2rem;
 }
 
+.overlay::after {
+  content: '';
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 888;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.dotWindmillContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+}
+
+.dotWindmill {
+  position: relative;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--white);
+  transform-origin: 5px 15px;
+  animation: dotWindmill 2s infinite linear;
+}
+
+.dotWindmill::before, .dotWindmill::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+}
+
+.dotWindmill::before {
+  left: -8.66px;
+  top: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--white);
+}
+
+.dotWindmill::after {
+  left: 8.66px;
+  top: 15px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: var(--white);
+}
+
+@keyframes dotWindmill {
+  0% {
+    transform: rotateZ(0deg) translate3d(0, 0, 0);
+  }
+  100% {
+    transform: rotateZ(720deg) translate3d(0, 0, 0);
+  }
+}
+
 @media screen and (min-width: 768px) {
 
   main {
