@@ -1,6 +1,6 @@
 # Entertainment app
 
-This project was created using figma design, courtesy of [Frontend Mentor] (https://www.frontendmentor.io/challenges/entertainment-web-app-J-UhgAW1X)
+This project was created using figma design, courtesy of [Frontend Mentor](https://www.frontendmentor.io/challenges/entertainment-web-app-J-UhgAW1X)
 
 ## Tech stack
 
