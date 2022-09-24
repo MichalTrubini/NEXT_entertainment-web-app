@@ -67,7 +67,7 @@ const Login = () => {
   };
 
   return (
-    <div className={loading ? 'overlay page' : 'page'}>
+    <div className={loading ? 'overlay' : ''}>
       {loading && (
         <div className="dotWindmillContainer">
           <div className="dotWindmill"></div>
