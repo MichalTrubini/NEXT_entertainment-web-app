@@ -70,7 +70,7 @@ const Signup = () => {
       setTimeout(function () {
         window.location.replace("/login");
 
-      }, 3000);
+      }, 2000);
 
     } catch (error) {
       if (error) setUserExists(true);
