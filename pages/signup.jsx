@@ -1,6 +1,8 @@
 import LoginTemplate from "../src/shared/components/login/loginTemplate";
 import { useRef, useState } from "react";
-import Portal from '../src/shared/portal/portal';
+import { useRouter } from "next/router";
+import { getSession, useSession } from "next-auth/react";
+import Portal from "../src/shared/portal/portal";
 import Success from "../src/shared/components/login/success";
 
 async function createUser(email, password) {
@@ -29,11 +31,23 @@ const Signup = () => {
   const [emptyEmail, setEmptyEmail] = useState(false);
   const [emptyPassword, setEmptyPassword] = useState(false);
   const [emptyPasswordRepeated, setEmptyPasswordRepeated] = useState(false);
+  const [shortPassword, setShortPassword] = useState(false);
+  const [shortRepeatedPassword, setShortRepeatedPassword] = useState(false);
   const [incorrectPassword, setIncorrectPassword] = useState(false);
   const [wrongFormatEmail, setWrongFormatEmail] = useState(false);
   const [wrongCredentials, setWrongCredentials] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [signUpSuccess, setSignupSuccess] = useState(false);
+
+  const { data: session, status } = useSession();
+
+  const router = useRouter();
+
+  getSession().then((session) => {
+    if (session) {
+      router.replace("/");
+    }
+  });
 
   async function submitHandler(event) {
     event.preventDefault();
@@ -45,17 +59,24 @@ const Signup = () => {
     const regex =
       /^[\w]{1,}[\w.+-]{0,}@[\w-]{2,}([.][a-zA-Z]{2,}|[.][\w-]{2,}[.][a-zA-Z]{2,})$/;
 
-    if (enteredEmail.length === 0) {
+    if (enteredEmail.trim().length === 0) {
       setEmptyEmail(true);
     } else if (!regex.test(enteredEmail)) {
       return setWrongFormatEmail(true);
     }
 
-    if (enteredPassword.length === 0) {
+    if (enteredPassword.trim().length === 0) {
       setEmptyPassword(true);
     }
-    if (enteredPasswordRepeated.length === 0) {
+    if (enteredPasswordRepeated.trim().length === 0) {
       return setEmptyPasswordRepeated(true);
+    }
+
+    if (enteredPassword.trim().length < 7) {
+      setShortPassword(true);
+    }
+    if (enteredPasswordRepeated.trim().length < 7) {
+      return setShortRepeatedPassword(true);
     }
 
     if (enteredPassword !== enteredPasswordRepeated) {
@@ -69,9 +90,7 @@ const Signup = () => {
 
       setTimeout(function () {
         window.location.replace("/login");
-
       }, 2000);
-
     } catch (error) {
       if (error) setUserExists(true);
     }
@@ -84,30 +103,39 @@ const Signup = () => {
     setWrongFormatEmail(false);
     setWrongCredentials(false);
     setIncorrectPassword(false);
+    setShortPassword(false);
+    setShortRepeatedPassword(false);
   };
 
   return (
     <>
-      <Portal selector={"#Portal"}>{signUpSuccess && <Success />}</Portal>
-      <LoginTemplate
-        title="Sign Up"
-        buttonText="Create an account"
-        message="Already have an account?"
-        link="/login"
-        action="Login"
-        onSubmit={submitHandler}
-        refEmail={emailInputRef}
-        refPassword={emailPasswordRef}
-        refPasswordRepeated={emailPasswordRepeatedRef}
-        emptyEmail={emptyEmail}
-        wrongFormatEmail={wrongFormatEmail}
-        emptyPassword={emptyPassword}
-        emptyPasswordRepeated={emptyPasswordRepeated}
-        incorrectPassword={incorrectPassword}
-        wrongCredentials={wrongCredentials}
-        userExists={userExists}
-        onClick={clearInputHandler}
-      />
+      {status === 'loading' && <div></div>}
+      {!session && (
+        <>
+          <Portal selector={"#Portal"}>{signUpSuccess && <Success />}</Portal>
+          <LoginTemplate
+            title="Sign Up"
+            buttonText="Create an account"
+            message="Already have an account?"
+            link="/login"
+            action="Login"
+            onSubmit={submitHandler}
+            refEmail={emailInputRef}
+            refPassword={emailPasswordRef}
+            refPasswordRepeated={emailPasswordRepeatedRef}
+            emptyEmail={emptyEmail}
+            wrongFormatEmail={wrongFormatEmail}
+            emptyPassword={emptyPassword}
+            emptyPasswordRepeated={emptyPasswordRepeated}
+            shortPassword={shortPassword}
+            shortRepeatedPassword={shortRepeatedPassword}
+            incorrectPassword={incorrectPassword}
+            wrongCredentials={wrongCredentials}
+            userExists={userExists}
+            onClick={clearInputHandler}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -21,7 +21,7 @@ const LoginTemplate = (props) => {
         <div className={styles.inputContainer}>
           <input
             className={
-              props.emptyEmail
+              props.emptyEmail || props.wrongFormatEmail || props.wrongCredentials
                 ? `${styles.input} ${styles.inputErrorClassname}`
                 : styles.input
             }
@@ -34,12 +34,14 @@ const LoginTemplate = (props) => {
           {props.wrongFormatEmail && (
             <p className={styles.warning}>Incorrect email format</p>
           )}
-          {props.emptyEmail && <p className={styles.warning}>Can&apos;t be empty</p>}
+          {props.emptyEmail && (
+            <p className={styles.warning}>Can&apos;t be empty</p>
+          )}
         </div>
         <div className={styles.inputContainer}>
           <input
             className={
-              props.emptyPassword
+              props.emptyPassword || props.emptyPasswordRepeated || props.shortPassword || props.shortRepeatedPassword || props.incorrectPassword || props.wrongCredentials
                 ? `${styles.input} ${styles.inputErrorClassname}`
                 : styles.input
             }
@@ -52,13 +54,16 @@ const LoginTemplate = (props) => {
           {props.emptyPassword && (
             <p className={styles.warning}>Can&apos;t be empty</p>
           )}
+          {props.shortPassword && (
+            <p className={styles.warning}>Must be at least 7 characters</p>
+          )}
         </div>
 
         {router.asPath === "/signup" && (
           <div className={styles.inputContainer}>
             <input
               className={
-                props.emptyPassword
+                props.emptyPassword || props.emptyPasswordRepeated || props.shortPassword || props.shortRepeatedPassword || props.incorrectPassword || props.wrongCredentials
                   ? `${styles.input} ${styles.inputErrorClassname}`
                   : styles.input
               }
@@ -70,6 +75,9 @@ const LoginTemplate = (props) => {
             />
             {props.emptyPasswordRepeated && (
               <p className={styles.warning}>Can&apos;t be empty</p>
+            )}
+            {props.shortRepeatedPassword && (
+              <p className={styles.warning}>Must be at least 7 characters</p>
             )}
             {props.incorrectPassword && (
               <p className={styles.warning}>Passwords are not equal</p>
