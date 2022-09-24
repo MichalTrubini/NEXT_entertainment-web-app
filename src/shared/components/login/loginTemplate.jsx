@@ -34,7 +34,7 @@ const LoginTemplate = (props) => {
           {props.wrongFormatEmail && (
             <p className={styles.warning}>Incorrect email format</p>
           )}
-          {props.emptyEmail && <p className={styles.warning}>Can't be empty</p>}
+          {props.emptyEmail && <p className={styles.warning}>Can&apos;t be empty</p>}
         </div>
         <div className={styles.inputContainer}>
           <input
@@ -50,7 +50,7 @@ const LoginTemplate = (props) => {
             required
           />
           {props.emptyPassword && (
-            <p className={styles.warning}>Can't be empty</p>
+            <p className={styles.warning}>Can&apos;t be empty</p>
           )}
         </div>
 
@@ -69,7 +69,7 @@ const LoginTemplate = (props) => {
               required
             />
             {props.emptyPasswordRepeated && (
-              <p className={styles.warning}>Can't be empty</p>
+              <p className={styles.warning}>Can&apos;t be empty</p>
             )}
             {props.incorrectPassword && (
               <p className={styles.warning}>Passwords are not equal</p>

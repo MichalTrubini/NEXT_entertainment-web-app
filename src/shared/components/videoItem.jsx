@@ -80,7 +80,7 @@ const VideoItem = (props) => {
           >
             <div className={styles.hoverPlay}>
               <Image src={playIcon} />
-              <p className={styles.play}>Play</p>
+              <p className={styles.play} alt='play'>Play</p>
             </div>
           </div>
         </div>
