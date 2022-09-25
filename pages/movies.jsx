@@ -53,6 +53,7 @@ const Home = ({ Movies, bookmarks }) => {
                 key={item.id}
                 dataid={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -79,6 +80,7 @@ const Home = ({ Movies, bookmarks }) => {
               <VideoItem
                 key={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}

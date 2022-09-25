@@ -88,8 +88,8 @@ const VideoItem = (props) => {
           >
             <div className={styles.hoverOverlay}>
               <div className={styles.hoverPlay}>
-                <Image src={playIcon} />
-                <p className={styles.play} alt="play">
+                <Image src={playIcon} alt="play"/>
+                <p className={styles.play} >
                   Play
                 </p>
               </div>

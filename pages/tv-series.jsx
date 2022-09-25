@@ -41,6 +41,7 @@ const Home = ({ TVShows, bookmarks }) => {
                 bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -67,6 +68,7 @@ const Home = ({ TVShows, bookmarks }) => {
               <VideoItem
                 key={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
