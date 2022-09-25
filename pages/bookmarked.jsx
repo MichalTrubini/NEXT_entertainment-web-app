@@ -54,10 +54,10 @@ const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
                 key={item.id}
                 dataid={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
-                alt={item.title}
                 category={item.category}
                 categoryIcon={
                   item.category === "Movie" ? movieIcon : seriesIcon

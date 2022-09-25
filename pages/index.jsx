@@ -95,6 +95,7 @@ const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
                 bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageLarge}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}

@@ -36,17 +36,17 @@ const Header = () => {
           </Link>
           <Link href="/movies">
             <li className={styles.listItem}>
-              <Image src={moviesIcon} alt="home" />
+              <Image src={moviesIcon} alt="movies" />
             </li>
           </Link>
           <Link href="/tv-series">
             <li className={styles.listItem}>
-              <Image src={TVseriesIcon} alt="home" />
+              <Image src={TVseriesIcon} alt="tv series" />
             </li>
           </Link>
           <Link href="/bookmarked">
             <li className={styles.listItem}>
-              <Image src={bookmarkIcon} alt="home" />
+              <Image src={bookmarkIcon} alt="bookmarks" />
             </li>
           </Link>
         </ul>
