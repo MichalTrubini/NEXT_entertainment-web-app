@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { getSession, useSession } from "next-auth/react";
 import Portal from "../src/shared/portal/portal";
 import Success from "../src/shared/components/login/success";
+import Head from "next/head";
 
 async function createUser(email, password) {
   const response = await fetch("/api/auth/auth", {
@@ -109,7 +110,12 @@ const Signup = () => {
 
   return (
     <>
-      {status === 'loading' && <div></div>}
+      <Head>
+        <title>Entertainment app</title>
+        <meta name="description" content="Entertainment app signup page" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {status === "loading" && <div></div>}
       {!session && (
         <>
           <Portal selector={"#Portal"}>{signUpSuccess && <Success />}</Portal>

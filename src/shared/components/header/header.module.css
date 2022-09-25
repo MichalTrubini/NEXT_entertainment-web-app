@@ -20,6 +20,7 @@
 .avatarContainer {
     width: 24px;
     height: 24px;
+    display: none;
 }
 
 .avatar {
@@ -40,8 +41,7 @@
     color: var(--white);
     font-size: 1rem;
     font-weight: 300;
-    position: absolute;
-    left: -4px;
+    line-height: 3rem;
 }
 
 .userLogout {
@@ -72,12 +72,15 @@
     .avatarContainer {
         width: 32px;
         height: 32px;
+        display: block;
     }
 
     .login {
+        position: absolute;
         top: 5px;
         left: -60px;
         font-size: 1.5rem;
+        line-height: 2rem;
     }
 
     .login:hover {

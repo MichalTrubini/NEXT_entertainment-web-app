@@ -3,6 +3,7 @@ import logo from "../../../../public/assets/logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import close from "../../../../public/assets/icon-close.svg";
 
 const LoginTemplate = (props) => {
   const router = useRouter();
@@ -17,11 +18,16 @@ const LoginTemplate = (props) => {
         </Link>
       </div>
       <form className={styles.form} onSubmit={props.onSubmit} noValidate>
+        <div className={styles.close}>
+          <Link href='/'><a><Image src={close} alt="close form"/></a></Link>
+        </div>
         <h1 className={styles.title}>{props.title}</h1>
         <div className={styles.inputContainer}>
           <input
             className={
-              props.emptyEmail || props.wrongFormatEmail || props.wrongCredentials
+              props.emptyEmail ||
+              props.wrongFormatEmail ||
+              props.wrongCredentials
                 ? `${styles.input} ${styles.inputErrorClassname}`
                 : styles.input
             }
@@ -41,7 +47,12 @@ const LoginTemplate = (props) => {
         <div className={styles.inputContainer}>
           <input
             className={
-              props.emptyPassword || props.emptyPasswordRepeated || props.shortPassword || props.shortRepeatedPassword || props.incorrectPassword || props.wrongCredentials
+              props.emptyPassword ||
+              props.emptyPasswordRepeated ||
+              props.shortPassword ||
+              props.shortRepeatedPassword ||
+              props.incorrectPassword ||
+              props.wrongCredentials
                 ? `${styles.input} ${styles.inputErrorClassname}`
                 : styles.input
             }
@@ -63,7 +74,12 @@ const LoginTemplate = (props) => {
           <div className={styles.inputContainer}>
             <input
               className={
-                props.emptyPassword || props.emptyPasswordRepeated || props.shortPassword || props.shortRepeatedPassword || props.incorrectPassword || props.wrongCredentials
+                props.emptyPassword ||
+                props.emptyPasswordRepeated ||
+                props.shortPassword ||
+                props.shortRepeatedPassword ||
+                props.incorrectPassword ||
+                props.wrongCredentials
                   ? `${styles.input} ${styles.inputErrorClassname}`
                   : styles.input
               }

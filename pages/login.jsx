@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { signIn, getSession, useSession } from "next-auth/react";
 import { useRef, useState, useEffect } from "react";
 import Router from "next/router";
+import Head from "next/head";
 
 const Login = () => {
   const emailInputRef = useRef();
@@ -79,6 +80,11 @@ const Login = () => {
 
   return (
     <>
+      <Head>
+        <title>Entertainment app</title>
+        <meta name="description" content="Entertainment app login page" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       {status === "loading" && <div></div>}
       {!session && (
         <div className={loading ? "overlay" : ""}>
