@@ -57,6 +57,7 @@ const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
+                alt={item.title}
                 category={item.category}
                 categoryIcon={
                   item.category === "Movie" ? movieIcon : seriesIcon
@@ -80,6 +81,7 @@ const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
                 bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -106,6 +108,7 @@ const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
                 bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -132,6 +135,7 @@ const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
                 bookmarks={bookmarks}
                 dataid={item.id}
                 src={item.imageSmall}
+                alt={item.title}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
