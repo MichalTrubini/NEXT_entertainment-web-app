@@ -8,9 +8,8 @@ import { useState } from "react";
 import Layout from "../src/shared/layout/layout";
 import { getSession } from "next-auth/react";
 
-const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
+const Home = ({media, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
-
 
   const submitUserDataHandler = (userData) => {
     if (userData === "") return setUserInput("");
@@ -18,9 +17,13 @@ const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
     setUserInput(userData.toLowerCase());
   };
 
-  const dataSearched = dataAll.filter((item) =>
+  const dataSearched = media.filter((item) =>
     item.title.toLowerCase().includes(userInput)
   );
+
+  const trending = media.filter((item) => item.isTrending === true);
+
+  const recommended = media.filter((item) => item.isTrending === false);
 
   return (
     <Layout>
@@ -38,12 +41,12 @@ const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
         <>
           <h2 className="header">Trending</h2>
           <div className="videos-trending">
-            {dataTrending.map((item) => (
+            {trending.map((item) => (
               <VideoItem
-                key={item.id}
+                key={item._id}
                 bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageLarge}
+                dataid={item._id}
+                src={item.thumbnail.trending.large}
                 alt={item.title}
                 year={item.year}
                 rating={item.rating}
@@ -61,12 +64,12 @@ const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
           </div>
           <h2 className="header">Recommended for you</h2>
           <div className="videos">
-            {dataRecommended.map((item) => (
+            {recommended.map((item) => (
               <VideoItem
-                key={item.id}
+                key={item._id}
                 bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageLarge}
+                dataid={item._id}
+                src={item.thumbnail.regular.large}
                 year={item.year}
                 rating={item.rating}
                 title={item.title}
@@ -91,10 +94,10 @@ const Home = ({ dataRecommended, dataTrending, dataAll, bookmarks }) => {
           <div className="videos">
             {dataSearched.map((item) => (
               <VideoItem
-                key={item.id}
+                key={item._id}
                 bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageLarge}
+                dataid={item._id}
+                src={item.thumbnail.regular.large}
                 alt={item.title}
                 year={item.year}
                 rating={item.rating}
@@ -140,14 +143,7 @@ export async function getServerSideProps(context) {
 
     const bookmarks = bookmarksRaw[0][0].map((str) => {
       return Number(str);
-    })
-
-    const documentsRecommended = await media
-      .find({ "thumbnail.trending": { $eq: null } })
-      .toArray();
-    const documentsTrending = await media
-      .find({ "thumbnail.trending": { $ne: null } })
-      .toArray();
+    });
 
     const documents = await media.find().toArray();
 
@@ -155,35 +151,7 @@ export async function getServerSideProps(context) {
 
     return {
       props: {
-        dataRecommended: documentsRecommended.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
-        dataTrending: documentsTrending.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.trending.small,
-          imageLarge: document.thumbnail.trending.large,
-        })),
-        dataAll: documents.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
+        media: documents,
         bookmarks: bookmarks,
       },
     };
@@ -196,48 +164,13 @@ export async function getServerSideProps(context) {
 
     const media = db.collection("media");
 
-    const documentsRecommended = await media
-      .find({ "thumbnail.trending": { $eq: null } })
-      .toArray();
-    const documentsTrending = await media
-      .find({ "thumbnail.trending": { $ne: null } })
-      .toArray();
-
     const documents = await media.find().toArray();
 
     client.close();
 
     return {
       props: {
-        dataRecommended: documentsRecommended.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
-        dataTrending: documentsTrending.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.trending.small,
-          imageLarge: document.thumbnail.trending.large,
-        })),
-        dataAll: documents.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
+        media: documents
       },
     };
   }

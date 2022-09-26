@@ -7,8 +7,9 @@ import Search from "../src/shared/components/search/search";
 import { useState } from "react";
 import Layout from "../src/shared/layout/layout";
 import { getSession } from "next-auth/react";
+import connectToDatabase from "../src/lib/db";
 
-const Home = ({ Movies, bookmarks }) => {
+const Home = ({ media, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
 
   const submitUserDataHandler = (userData) => {
@@ -17,9 +18,13 @@ const Home = ({ Movies, bookmarks }) => {
     setUserInput(userData.toLowerCase());
   };
 
-  const dataSearched = Movies.filter((item) =>
+  const dataSearched = media.filter((item) =>
     item.title.toLowerCase().includes(userInput)
   );
+
+  const Movies = media.filter((item) =>
+  item.category === 'Movie'
+);
 
   const dataSource = userInput.length === 0 ? Movies : dataSearched;
 
@@ -48,9 +53,9 @@ const Home = ({ Movies, bookmarks }) => {
           {dataSource.map((item) => (
             <VideoItem
               bookmarks={bookmarks}
-              key={item.id}
-              dataid={item.id}
-              src={item.imageSmall}
+              key={item._id}
+              dataid={item._id}
+              src={item.thumbnail.regular.large}
               alt={item.title}
               year={item.year}
               rating={item.rating}
@@ -74,10 +79,8 @@ export async function getServerSideProps(context) {
   if (session) {
     const emailLoggedUser = session.user.email;
 
-    const client = await MongoClient.connect(
-      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-    );
-
+    const client = await connectToDatabase()
+    
     const db = client.db();
 
     const media = db.collection("media");
@@ -94,24 +97,15 @@ export async function getServerSideProps(context) {
       return Number(str);
     });
 
-    const documentsMovies = await media
-      .find({ category: { $eq: "Movie" } })
+    const documents = await media
+      .find()
       .toArray();
 
     client.close();
 
     return {
       props: {
-        Movies: documentsMovies.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
+        media: documents,
         bookmarks: bookmarks,
       },
     };
@@ -124,24 +118,15 @@ export async function getServerSideProps(context) {
 
     const collection = db.collection("media");
 
-    const documentsMovies = await collection
-      .find({ category: { $eq: "Movie" } })
+    const documents = await collection
+      .find()
       .toArray();
 
     client.close();
 
     return {
       props: {
-        Movies: documentsMovies.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
+        media: documents
       },
     };
   }

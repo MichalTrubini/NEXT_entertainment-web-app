@@ -8,15 +8,19 @@ import VideoItem from "../src/shared/components/videoItem";
 import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 
-const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
+const Bookmarked = ({ media, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
-  const {data: session} = useSession();
+  const { data: session } = useSession();
 
   const submitUserDataHandler = (userData) => {
     if (userData === "") return setUserInput("");
 
     setUserInput(userData.toLowerCase());
   };
+
+  const TVShows = media.filter((item) => item.category === "TV Series");
+
+  const Movies = media.filter((item) => item.category === "Movie");
 
   const TVShowsSearched = TVShows.filter((item) =>
     item.title.toLowerCase().includes(userInput)
@@ -38,117 +42,121 @@ const Bookmarked = ({ TVShows, Movies, bookmarks }) => {
         prompt="Search for bookmarked shows"
       />
 
-      {session && TVShows.length === 0 && Movies.length === 0 && (
-        <div>
-          <p className="bookmarkWarning">There are no bookmarked shows!</p>
-        </div>
-      )}
-
-      {session && Movies.length > 0 && userInput.length === 0 && (
+      {session && (
         <>
-          <h2 className="header">Bookmarked Movies</h2>
-          <div className="videos">
-            {Movies.map((item) => (
-              <VideoItem
-                bookmarks={bookmarks}
-                key={item.id}
-                dataid={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
-        </>
-      )}
+          {TVShows.length === 0 && Movies.length === 0 && (
+            <div>
+              <p className="bookmarkWarning">There are no bookmarked shows!</p>
+            </div>
+          )}
 
-      {session && MoviesSearched.length > 0 && userInput.length !== 0 && (
-        <>
-          <h2 className="header">Bookmarked Movies</h2>
-          <div className="videos">
-            {MoviesSearched.map((item) => (
-              <VideoItem
-                key={item.id}
-                bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
-        </>
-      )}
+          {Movies.length > 0 && userInput.length === 0 && (
+            <>
+              <h2 className="header">Bookmarked Movies</h2>
+              <div className="videos">
+                {Movies.map((item) => (
+                  <VideoItem
+                    bookmarks={bookmarks}
+                    key={item._id}
+                    dataid={item._id}
+                    src={item.thumbnail.regular.large}
+                    alt={item.title}
+                    year={item.year}
+                    rating={item.rating}
+                    title={item.title}
+                    category={item.category}
+                    categoryIcon={
+                      item.category === "Movie" ? movieIcon : seriesIcon
+                    }
+                    classNameImage="media-container"
+                    classNameTopRow="toprow"
+                    classNameBottomRow="bottomrow"
+                  />
+                ))}
+              </div>
+            </>
+          )}
 
-      {session && TVShows.length > 0 && userInput.length === 0 && (
-        <>
-          <h2 className="header header-fix">Bookmarked TV Series</h2>
-          <div className="videos">
-            {TVShows.map((item) => (
-              <VideoItem
-                key={item.id}
-                bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
-        </>
-      )}
+          {MoviesSearched.length > 0 && userInput.length !== 0 && (
+            <>
+              <h2 className="header">Bookmarked Movies</h2>
+              <div className="videos">
+                {MoviesSearched.map((item) => (
+                  <VideoItem
+                    key={item._id}
+                    bookmarks={bookmarks}
+                    dataid={item._id}
+                    src={item.thumbnail.regular.large}
+                    alt={item.title}
+                    year={item.year}
+                    rating={item.rating}
+                    title={item.title}
+                    category={item.category}
+                    categoryIcon={
+                      item.category === "Movie" ? movieIcon : seriesIcon
+                    }
+                    classNameImage="media-container"
+                    classNameTopRow="toprow"
+                    classNameBottomRow="bottomrow"
+                  />
+                ))}
+              </div>
+            </>
+          )}
 
-      {session && TVShowsSearched.length > 0 && userInput.length !== 0 && (
-        <>
-          <h2 className="header header-fix">Bookmarked TV Series</h2>
-          <div className="videos">
-            {TVShowsSearched.map((item) => (
-              <VideoItem
-                key={item.id}
-                bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
+          {TVShows.length > 0 && userInput.length === 0 && (
+            <>
+              <h2 className="header header-fix">Bookmarked TV Series</h2>
+              <div className="videos">
+                {TVShows.map((item) => (
+                  <VideoItem
+                    key={item._id}
+                    bookmarks={bookmarks}
+                    dataid={item._id}
+                    src={item.thumbnail.regular.large}
+                    alt={item.title}
+                    year={item.year}
+                    rating={item.rating}
+                    title={item.title}
+                    category={item.category}
+                    categoryIcon={
+                      item.category === "Movie" ? movieIcon : seriesIcon
+                    }
+                    classNameImage="media-container"
+                    classNameTopRow="toprow"
+                    classNameBottomRow="bottomrow"
+                  />
+                ))}
+              </div>
+            </>
+          )}
+
+          {TVShowsSearched.length > 0 && userInput.length !== 0 && (
+            <>
+              <h2 className="header header-fix">Bookmarked TV Series</h2>
+              <div className="videos">
+                {TVShowsSearched.map((item) => (
+                  <VideoItem
+                    key={item._id}
+                    bookmarks={bookmarks}
+                    dataid={item._id}
+                    src={item.thumbnail.regular.large}
+                    alt={item.title}
+                    year={item.year}
+                    rating={item.rating}
+                    title={item.title}
+                    category={item.category}
+                    categoryIcon={
+                      item.category === "Movie" ? movieIcon : seriesIcon
+                    }
+                    classNameImage="media-container"
+                    classNameTopRow="toprow"
+                    classNameBottomRow="bottomrow"
+                  />
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
 
@@ -189,47 +197,25 @@ export async function getServerSideProps(context) {
       return Number(str);
     });
 
-    const documentsShows = await media
-      .find({ category: { $eq: "TV Series" }, _id: { $in: bookmarks } })
-      .toArray();
-
-    const documentsMovies = await media
-      .find({ category: { $eq: "Movie" }, _id: { $in: bookmarks } })
+    const documents = await media
+      .find({ _id: { $in: bookmarks } })
       .toArray();
 
     client.close();
 
     return {
       props: {
-        TVShows: documentsShows.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
-        Movies: documentsMovies.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
-        bookmarks: bookmarks
+        media: documents,
+        bookmarks: bookmarks,
       },
     };
-  } else return {
-        redirect: {
-            destination: '/no-bookmarks',
-            statusCode: 307
-        }
-  }
+  } else
+    return {
+      redirect: {
+        destination: "/no-bookmarks",
+        statusCode: 307,
+      },
+    };
 }
 
 export default Bookmarked;

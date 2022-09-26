@@ -5,10 +5,10 @@ import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 import Search from "../src/shared/components/search/search";
 import { useState } from "react";
-import Layout from '../src/shared/layout/layout'
+import Layout from "../src/shared/layout/layout";
 import { getSession } from "next-auth/react";
 
-const Home = ({ TVShows, bookmarks }) => {
+const Home = ({ media, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
 
   const submitUserDataHandler = (userData) => {
@@ -17,7 +17,15 @@ const Home = ({ TVShows, bookmarks }) => {
     setUserInput(userData.toLowerCase());
   };
 
-  const dataSearched = TVShows.filter((item) => item.title.toLowerCase().includes(userInput));
+  const dataSearched = media.filter((item) =>
+    item.title.toLowerCase().includes(userInput)
+  );
+
+  const TVShows = media.filter((item) =>
+  item.category === 'TV Series'
+);
+
+  const dataSource = userInput.length === 0 ? TVShows : dataSearched;
 
   return (
     <Layout>
@@ -31,65 +39,38 @@ const Home = ({ TVShows, bookmarks }) => {
         onSubmitUserData={submitUserDataHandler}
         prompt="Search for TV series"
       />
-      {userInput.length === 0 && (
-        <>
-          <h2 className="header">TV Series</h2>
-          <div className="videos">
-            {TVShows.map((item) => (
-              <VideoItem
-                key={item.id}
-                bookmarks={bookmarks}
-                dataid={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
-        </>
-      )}
 
-      {userInput.length !== 0 && (
-        <>
-          <h2 className="header">{`Found ${dataSearched.length} ${
-            dataSearched.length === 1 ? "result" : "results"
-          } for '${userInput}'`}</h2>
-          <div className="videos">
-            {dataSearched.map((item) => (
-              <VideoItem
-                key={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
-        </>
-      )}
+      <h2 className="header">
+        {userInput.length === 0
+          ? "TV Series"
+          : `Found ${dataSearched.length} ${
+              dataSearched.length === 1 ? "result" : "results"
+            } for '${userInput}'`}
+      </h2>
+      <div className="videos">
+        {dataSource.map((item) => (
+          <VideoItem
+            key={item._id}
+            bookmarks={bookmarks}
+            dataid={item._id}
+            src={item.thumbnail.regular.large}
+            alt={item.title}
+            year={item.year}
+            rating={item.rating}
+            title={item.title}
+            category={item.category}
+            categoryIcon={item.category === "Movie" ? movieIcon : seriesIcon}
+            classNameImage="media-container"
+            classNameTopRow="toprow"
+            classNameBottomRow="bottomrow"
+          />
+        ))}
+      </div>
     </Layout>
   );
 };
 
 export async function getServerSideProps(context) {
-
   const session = await getSession({ req: context.req });
 
   if (session) {
@@ -115,57 +96,37 @@ export async function getServerSideProps(context) {
       return Number(str);
     });
 
-    const documentsTVShows = await media
-      .find({ category: { $eq: "TV Series" } })
+    const documents = await media
+      .find()
       .toArray();
 
     client.close();
 
     return {
       props: {
-        TVShows: documentsTVShows.map((document) => ({
-          id: document._id,
-          year: document.year,
-          rating: document.rating,
-          title: document.title,
-          category: document.category,
-          imageSmall: document.thumbnail.regular.small,
-          imageMedium: document.thumbnail.regular.medium,
-          imageLarge: document.thumbnail.regular.large,
-        })),
-        bookmarks: bookmarks
+        media: documents,
+        bookmarks: bookmarks,
+      },
+    };
+  } else {
+    const client = await MongoClient.connect(
+      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+    );
+
+    const db = client.db();
+
+    const media = db.collection("media");
+
+    const documents = await media.find().toArray();
+
+    client.close();
+
+    return {
+      props: {
+        media: documents
       },
     };
   }
-  else {
-  const client = await MongoClient.connect(
-    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-  );
-
-  const db = client.db();
-
-  const collection = db.collection("media");
-
-  const documentsTVShows = await collection
-    .find({ "category": { $eq: "TV Series" } })
-    .toArray();
-
-  client.close();
-
-  return {
-    props: {
-      TVShows: documentsTVShows.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.regular.small,
-        imageMedium: document.thumbnail.regular.medium,
-        imageLarge: document.thumbnail.regular.large,
-      }))
-    }
-  };
-}}
+}
 
 export default Home;
