@@ -4,10 +4,9 @@ import VideoItem from "../src/shared/components/videoItem";
 import movieIcon from "../public/assets/icon-category-movie.svg";
 import seriesIcon from "../public/assets/icon-category-tv.svg";
 import Search from "../src/shared/components/search/search";
-import { useState, useEffect } from "react";
-import Layout from '../src/shared/layout/layout'
+import { useState } from "react";
+import Layout from "../src/shared/layout/layout";
 import { getSession } from "next-auth/react";
-import Router from 'next/router'
 
 const Home = ({ Movies, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
@@ -18,20 +17,11 @@ const Home = ({ Movies, bookmarks }) => {
     setUserInput(userData.toLowerCase());
   };
 
-  const dataSearched = Movies.filter((item) => item.title.toLowerCase().includes(userInput));
+  const dataSearched = Movies.filter((item) =>
+    item.title.toLowerCase().includes(userInput)
+  );
 
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    Router.events.on('routeChangeStart', () => setLoading(true));
-    Router.events.on('routeChangeComplete', () => setLoading(false));
-    Router.events.on('routeChangeError', () => setLoading(false));
-    return () => {
-      Router.events.off('routeChangeStart', () => setLoading(true));
-      Router.events.off('routeChangeComplete', () => setLoading(false));
-      Router.events.off('routeChangeError', () => setLoading(false));
-    };
-  }, [Router.events]);
+  const dataSource = userInput.length === 0 ? Movies : dataSearched;
 
   return (
     <Layout>
@@ -41,67 +31,44 @@ const Home = ({ Movies, bookmarks }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Search onSubmitUserData={submitUserDataHandler} prompt="Search for movies"/>
+      <Search
+        onSubmitUserData={submitUserDataHandler}
+        prompt="Search for movies"
+      />
 
-      {userInput.length === 0 && (
-        <div >
-          <h2 className="header">Movies</h2>
-          <div className="videos">
-            {Movies.map((item) => (
-              <VideoItem
-                bookmarks={bookmarks}
-                key={item.id}
-                dataid={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
+      <div>
+        <h2 className="header">
+          {userInput.length === 0
+            ? "Movies"
+            : `Found ${dataSearched.length} ${
+                dataSearched.length === 1 ? "result" : "results"
+              } for '${userInput}'`}
+        </h2>
+        <div className="videos">
+          {dataSource.map((item) => (
+            <VideoItem
+              bookmarks={bookmarks}
+              key={item.id}
+              dataid={item.id}
+              src={item.imageSmall}
+              alt={item.title}
+              year={item.year}
+              rating={item.rating}
+              title={item.title}
+              category={item.category}
+              categoryIcon={item.category === "Movie" ? movieIcon : seriesIcon}
+              classNameImage="media-container"
+              classNameTopRow="toprow"
+              classNameBottomRow="bottomrow"
+            />
+          ))}
         </div>
-      )}
-
-      {userInput.length !== 0 && (
-        <>
-          <h2 className="header">{`Found ${dataSearched.length} ${
-            dataSearched.length === 1 ? "result" : "results"
-          } for '${userInput}'`}</h2>
-          <div className="videos">
-            {dataSearched.map((item) => (
-              <VideoItem
-                key={item.id}
-                src={item.imageSmall}
-                alt={item.title}
-                year={item.year}
-                rating={item.rating}
-                title={item.title}
-                category={item.category}
-                categoryIcon={
-                  item.category === "Movie" ? movieIcon : seriesIcon
-                }
-                classNameImage="media-container"
-                classNameTopRow="toprow"
-                classNameBottomRow="bottomrow"
-              />
-            ))}
-          </div>
-        </>
-      )}
+      </div>
     </Layout>
   );
 };
 
 export async function getServerSideProps(context) {
-
   const session = await getSession({ req: context.req });
 
   if (session) {
@@ -145,39 +112,39 @@ export async function getServerSideProps(context) {
           imageMedium: document.thumbnail.regular.medium,
           imageLarge: document.thumbnail.regular.large,
         })),
-        bookmarks: bookmarks
+        bookmarks: bookmarks,
+      },
+    };
+  } else {
+    const client = await MongoClient.connect(
+      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+    );
+
+    const db = client.db();
+
+    const collection = db.collection("media");
+
+    const documentsMovies = await collection
+      .find({ category: { $eq: "Movie" } })
+      .toArray();
+
+    client.close();
+
+    return {
+      props: {
+        Movies: documentsMovies.map((document) => ({
+          id: document._id,
+          year: document.year,
+          rating: document.rating,
+          title: document.title,
+          category: document.category,
+          imageSmall: document.thumbnail.regular.small,
+          imageMedium: document.thumbnail.regular.medium,
+          imageLarge: document.thumbnail.regular.large,
+        })),
       },
     };
   }
-  else {
-  const client = await MongoClient.connect(
-    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-  );
-
-  const db = client.db();
-
-  const collection = db.collection("media");
-
-  const documentsMovies = await collection
-    .find({ "category": { $eq: "Movie" } })
-    .toArray();
-
-  client.close();
-
-  return {
-    props: {
-      Movies: documentsMovies.map((document) => ({
-        id: document._id,
-        year: document.year,
-        rating: document.rating,
-        title: document.title,
-        category: document.category,
-        imageSmall: document.thumbnail.regular.small,
-        imageMedium: document.thumbnail.regular.medium,
-        imageLarge: document.thumbnail.regular.large,
-      }))
-    }
-  };
-}}
+}
 
 export default Home;
