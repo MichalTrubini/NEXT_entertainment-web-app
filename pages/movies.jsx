@@ -7,7 +7,6 @@ import Search from "../src/shared/components/search/search";
 import { useState } from "react";
 import Layout from "../src/shared/layout/layout";
 import { getSession } from "next-auth/react";
-import connectToDatabase from "../src/lib/db";
 
 const Home = ({ media, bookmarks }) => {
   const [userInput, setUserInput] = useState("");
@@ -22,9 +21,7 @@ const Home = ({ media, bookmarks }) => {
     item.title.toLowerCase().includes(userInput)
   );
 
-  const Movies = media.filter((item) =>
-  item.category === 'Movie'
-);
+  const Movies = media.filter((item) => item.category === "Movie");
 
   const dataSource = userInput.length === 0 ? Movies : dataSearched;
 
@@ -76,15 +73,19 @@ const Home = ({ media, bookmarks }) => {
 export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req });
 
+  const client = await MongoClient.connect(
+    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+
+  const media = db.collection("media");
+  const users = db.collection("users");
+
+  const documents = await media.find().toArray();
+
   if (session) {
+
     const emailLoggedUser = session.user.email;
-
-    const client = await connectToDatabase()
-    
-    const db = client.db();
-
-    const media = db.collection("media");
-    const users = db.collection("users");
 
     const documentsBookmarks = await users
       .find({ email: emailLoggedUser }, { bookmarks: 1, _id: 0 })
@@ -97,10 +98,6 @@ export async function getServerSideProps(context) {
       return Number(str);
     });
 
-    const documents = await media
-      .find()
-      .toArray();
-
     client.close();
 
     return {
@@ -109,27 +106,18 @@ export async function getServerSideProps(context) {
         bookmarks: bookmarks,
       },
     };
-  } else {
-    const client = await MongoClient.connect(
-      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-    );
-
-    const db = client.db();
-
-    const collection = db.collection("media");
-
-    const documents = await collection
-      .find()
-      .toArray();
-
-    client.close();
-
-    return {
-      props: {
-        media: documents
-      },
-    };
   }
+else {
+
+  client.close();
+  
+  return {
+  props: {
+    media: documents,
+  },
+}
+}
+
 }
 
 export default Home;

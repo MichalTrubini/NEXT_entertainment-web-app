@@ -73,17 +73,19 @@ const Home = ({ media, bookmarks }) => {
 export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req });
 
+  const client = await MongoClient.connect(
+    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+  );
+  const db = client.db();
+
+  const media = db.collection("media");
+  const users = db.collection("users");
+
+  const documents = await media.find().toArray();
+
   if (session) {
+
     const emailLoggedUser = session.user.email;
-
-    const client = await MongoClient.connect(
-      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-    );
-
-    const db = client.db();
-
-    const media = db.collection("media");
-    const users = db.collection("users");
 
     const documentsBookmarks = await users
       .find({ email: emailLoggedUser }, { bookmarks: 1, _id: 0 })
@@ -96,10 +98,6 @@ export async function getServerSideProps(context) {
       return Number(str);
     });
 
-    const documents = await media
-      .find()
-      .toArray();
-
     client.close();
 
     return {
@@ -108,25 +106,18 @@ export async function getServerSideProps(context) {
         bookmarks: bookmarks,
       },
     };
-  } else {
-    const client = await MongoClient.connect(
-      "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
-    );
-
-    const db = client.db();
-
-    const media = db.collection("media");
-
-    const documents = await media.find().toArray();
-
-    client.close();
-
-    return {
-      props: {
-        media: documents
-      },
-    };
   }
+else {
+
+  client.close();
+  
+  return {
+  props: {
+    media: documents,
+  },
+}
+}
+
 }
 
 export default Home;
