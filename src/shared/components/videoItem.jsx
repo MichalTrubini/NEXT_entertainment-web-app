@@ -78,7 +78,7 @@ const VideoItem = (props) => {
           onMouseEnter={() => setIsShown(true)}
           onMouseLeave={() => setIsShown(false)}
         >
-          <Image src={props.src} alt={props.alt} layout="fill" />
+          <Image src={props.src} alt={props.alt} layout="fill" className={styles.image}/>
           <CSSTransition
             mountOnEnter
             unmountOnExit

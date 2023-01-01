@@ -74,7 +74,7 @@ export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req });
 
   const client = await MongoClient.connect(
-    "mongodb+srv://frontendMentor:frontendMentor@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority"
+    `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.gociwcj.mongodb.net/entertainment?retryWrites=true&w=majority`
   );
   const db = client.db();
 
