@@ -11,9 +11,6 @@
 # next.js
 /.next/
 /out/
-/lib/
-db.js
-hashPass.js
 
 # production
 /build
